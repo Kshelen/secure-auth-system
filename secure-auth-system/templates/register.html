@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SecureAuth — Register</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0f; --panel: #111118; --border: #1e1e2e;
+      --accent: #818cf8; --accent2: #6ee7b7;
+      --text: #e2e8f0; --muted: #64748b;
+      --error: #f87171; --success: #6ee7b7;
+    }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh; display: flex;
+      align-items: center; justify-content: center; overflow: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(129,140,248,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(129,140,248,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: gridMove 20s linear infinite; pointer-events: none;
+    }
+    @keyframes gridMove { 0% { transform: translateY(0); } 100% { transform: translateY(40px); } }
+    .glow { position: fixed; width: 400px; height: 400px; border-radius: 50%; filter: blur(120px); opacity: 0.12; pointer-events: none; }
+    .glow-1 { top: -100px; right: -100px; background: var(--accent); }
+    .glow-2 { bottom: -100px; left: -100px; background: var(--accent2); }
+    .card {
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: 16px; padding: 48px 40px; width: 100%; max-width: 420px;
+      position: relative; z-index: 10;
+      box-shadow: 0 0 0 1px rgba(129,140,248,0.05), 0 32px 64px rgba(0,0,0,0.5);
+      animation: slideUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
+    }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    .badge {
+      font-family: 'Space Mono', monospace; font-size: 10px;
+      letter-spacing: 3px; text-transform: uppercase; color: var(--accent);
+      margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+    }
+    .badge::before {
+      content: ''; width: 6px; height: 6px;
+      background: var(--accent); border-radius: 50%;
+    }
+    h1 { font-family: 'Space Mono', monospace; font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+    .subtitle { color: var(--muted); font-size: 14px; margin-bottom: 32px; }
+    .field { margin-bottom: 18px; }
+    label { display: block; font-size: 12px; font-family: 'Space Mono', monospace; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
+    input {
+      width: 100%; background: var(--bg); border: 1px solid var(--border);
+      border-radius: 8px; padding: 12px 16px; color: var(--text);
+      font-family: 'DM Sans', sans-serif; font-size: 15px; outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(129,140,248,0.1); }
+    input::placeholder { color: var(--muted); }
+
+    /* Password strength bar */
+    .strength-bar { height: 3px; background: var(--border); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+    .strength-fill { height: 100%; width: 0%; transition: width 0.3s, background 0.3s; border-radius: 2px; }
+
+    .btn {
+      width: 100%; background: var(--accent); color: #fff;
+      border: none; border-radius: 8px; padding: 14px;
+      font-family: 'Space Mono', monospace; font-size: 14px; font-weight: 700;
+      letter-spacing: 1px; cursor: pointer; margin-top: 8px;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .msg { margin-top: 16px; padding: 12px 16px; border-radius: 8px; font-size: 13px; display: none; }
+    .msg.error { background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.3); color: var(--error); display: block; }
+    .msg.success { background: rgba(110,231,183,0.1); border: 1px solid rgba(110,231,183,0.3); color: var(--success); display: block; }
+    .footer-link { text-align: center; margin-top: 28px; font-size: 13px; color: var(--muted); }
+    .footer-link a { color: var(--accent); text-decoration: none; font-weight: 500; }
+    .footer-link a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+
+  <div class="card">
+    <div class="badge">Create Account</div>
+    <h1>Get Started</h1>
+    <p class="subtitle">Create your secure account in seconds</p>
+
+    <div class="field">
+      <label>Username</label>
+      <input type="text" id="username" placeholder="Choose a username" autocomplete="username"/>
+    </div>
+
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="email" placeholder="your@email.com" autocomplete="email"/>
+    </div>
+
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Min. 6 characters" oninput="checkStrength(this.value)" autocomplete="new-password"/>
+      <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+    </div>
+
+    <button class="btn" onclick="doRegister()" id="regBtn">CREATE ACCOUNT →</button>
+    <div class="msg" id="msg"></div>
+
+    <div class="footer-link">
+      Already have an account? <a href="/login">Sign in</a>
+    </div>
+  </div>
+
+  <script>
+    function checkStrength(pw) {
+      const fill = document.getElementById('strengthFill');
+      let score = 0;
+      if (pw.length >= 6) score++;
+      if (pw.length >= 10) score++;
+      if (/[A-Z]/.test(pw)) score++;
+      if (/[0-9]/.test(pw)) score++;
+      if (/[^A-Za-z0-9]/.test(pw)) score++;
+      const colors = ['#f87171','#fb923c','#facc15','#4ade80','#6ee7b7'];
+      fill.style.width = (score * 20) + '%';
+      fill.style.background = colors[score - 1] || '#1e1e2e';
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Enter') doRegister(); });
+
+    async function doRegister() {
+      const username = document.getElementById('username').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const btn = document.getElementById('regBtn');
+      const msg = document.getElementById('msg');
+
+      msg.className = 'msg'; msg.textContent = '';
+
+      if (!username || !email || !password) {
+        msg.className = 'msg error'; msg.textContent = 'All fields are required.'; return;
+      }
+      if (password.length < 6) {
+        msg.className = 'msg error'; msg.textContent = 'Password must be at least 6 characters.'; return;
+      }
+
+      btn.disabled = true; btn.textContent = 'CREATING...';
+
+      try {
+        const res = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, email, password })
+        });
+        const data = await res.json();
+        if (data.success) {
+          msg.className = 'msg success';
+          msg.textContent = '✓ Account created! Redirecting to login...';
+          setTimeout(() => window.location.href = '/login', 1200);
+        } else {
+          msg.className = 'msg error'; msg.textContent = data.message;
+          btn.disabled = false; btn.textContent = 'CREATE ACCOUNT →';
+        }
+      } catch {
+        msg.className = 'msg error'; msg.textContent = 'Connection error. Please try again.';
+        btn.disabled = false; btn.textContent = 'CREATE ACCOUNT →';
+      }
+    }
+  </script>
+</body>
+</html>
